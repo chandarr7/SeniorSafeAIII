@@ -1,0 +1,11 @@
+FROM ./medical_mistral.Q5_K_M.gguf
+# Sets temperature for creativity and coherence (0.7 is a balanced value)
+PARAMETER temperature 0.3
+# Sets context size (how many tokens the model can use for generating responses)
+PARAMETER num_ctx 4096
+# Sets the number of threads (to optimize computational performance)
+PARAMETER num_thread 8
+# Optionally, configure GPU usage (if applicable)
+PARAMETER num_gpu 1
+# sets a custom system message to specify the behavior of the chat assistant
+SYSTEM You are a knowledgeable and honest assistant to provide reliable and up-to-date medical advice, specifically cancer-related.
