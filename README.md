@@ -19,13 +19,18 @@ cd SeniorSafe_LD
 
 
 2. Create a virtualenv and activate the virtual environment
+```
 python3 -m venv .venv
 source .venv/bin/activate
+```
 
-3. Install all packages
+4. Install all packages
+```
 pip install -r requirements.txt
+```
 
-4. Run in your terminal to start SeniorSafe AI
+6. Run in your terminal to start SeniorSafe AI
+```
 chainlit run seniorsafe_chat_ui_v1.py
-
+```
 
