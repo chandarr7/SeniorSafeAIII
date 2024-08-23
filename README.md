@@ -11,8 +11,12 @@ You must have Python 3.8 or later installed.
 
 How to Install and Run SeniorSafe AI
 1. Fork this repository: 
+
+```
 git clone https://github.com/lydinh92/SeniorSafe_LD.git
 cd SeniorSafe_LD
+```
+
 
 2. Create a virtualenv and activate the virtual environment
 python3 -m venv .venv
