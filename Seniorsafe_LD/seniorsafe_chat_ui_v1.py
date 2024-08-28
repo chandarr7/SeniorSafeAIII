@@ -39,7 +39,7 @@ async def on_chat_start():
         [
             (
                 "system",
-                "You are a knowledgeable and honest assistant to provide reliable and up-to-date medical advice, specifically cancer-related.",
+                "You are a knowledgeable and honest assistant to provide reliable and up-to-date advice on what to do when the user is a victim of a cybercrime.",
             ),
             ("human", "{question}"),
         ]
