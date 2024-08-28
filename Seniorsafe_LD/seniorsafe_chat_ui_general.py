@@ -73,7 +73,7 @@ async def on_chat_start():
     # General chat model for non-PDF related questions
     general_prompt = ChatPromptTemplate.from_messages(
         [
-            ("system", "You are a knowledgeable and honest assistant to provide reliable and up-to-date medical advice, specifically cancer-related."),
+            ("system", "You are a knowledgeable and honest assistant to provide reliable and up-to-date information for user who is a victim of a cyber crime."),
             ("human", "{question}"),
         ]
     )
@@ -82,7 +82,7 @@ async def on_chat_start():
     # Store the general chat model
   #  cl.user_session.set("general_runnable", general_runnable)
 
-  #  await cl.Message(content="Welcome to MEDiate ai. The system is fully loaded. You can now ask questions!").send()
+  #  await cl.Message(content="Welcome to SeniorSafe ai. The system is fully loaded. You can now ask questions!").send()
 
 @cl.on_message
 async def on_message(message: cl.Message):
