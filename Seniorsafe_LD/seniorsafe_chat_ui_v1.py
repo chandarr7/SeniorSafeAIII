@@ -34,7 +34,6 @@ async def set_starters():
 @cl.on_chat_start
 async def on_chat_start():
     model = Ollama(model="mistral") ## default
-#    model = Ollama(model="medical_mistral") ## this is my custom model
     prompt = ChatPromptTemplate.from_messages(
         [
             (
