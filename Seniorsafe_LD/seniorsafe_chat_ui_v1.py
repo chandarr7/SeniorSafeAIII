@@ -6,30 +6,30 @@ from langchain.schema.runnable.config import RunnableConfig
 
 import chainlit as cl
 
-@cl.set_starters
-async def set_starters():
-    return [
-    	cl.Starter(
-        	label="Identity Stolen",
-        	message="What should I do if my identity has been stolen in an online scam?",
-        	icon="/public/identity_theft.png",
-    ),
-    	cl.Starter(
-        	label="Financial Loss",
-        	message="How can I recover money lost to a scammer?",
-        	icon="/public/financial_loss.png",
-    ),
-    	cl.Starter(
-        	label="Protecting Accounts",
-        	message="How can I protect my bank accounts after being scammed?",
-        	icon="/public/protect_accounts.png",
-    ),
-    	cl.Starter(
-        	label="Reporting a Scam",
-        	message="Who should I report a cyber scam to?",
-        	icon="/public/report_scam.png",
-        )
-    ]
+# @cl.set_starters
+# async def set_starters():
+#     return [
+#     	cl.Starter(
+#         	label="Identity Stolen",
+#         	message="What should I do if my identity has been stolen in an online scam?",
+#         	icon="/public/identity_theft.png",
+#     ),
+#     	cl.Starter(
+#         	label="Financial Loss",
+#         	message="How can I recover money lost to a scammer?",
+#         	icon="/public/financial_loss.png",
+#     ),
+#     	cl.Starter(
+#         	label="Protecting Accounts",
+#         	message="How can I protect my bank accounts after being scammed?",
+#         	icon="/public/protect_accounts.png",
+#     ),
+#     	cl.Starter(
+#         	label="Reporting a Scam",
+#         	message="Who should I report a cyber scam to?",
+#         	icon="/public/report_scam.png",
+#         )
+#     ]
 
 @cl.on_chat_start
 async def on_chat_start():
@@ -58,5 +58,5 @@ async def on_message(message: cl.Message):
         config=RunnableConfig(callbacks=[cl.LangchainCallbackHandler()]),
     ):
         await msg.stream_token(chunk)
-
+    await msg.stream_token("&*&8")
     await msg.send()
