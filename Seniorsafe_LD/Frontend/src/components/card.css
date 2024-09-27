@@ -1,0 +1,43 @@
+/* src/card.css */
+.cards-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  gap: 20px;
+  flex-wrap: wrap; /* Allow cards to wrap in rows */
+}
+
+.card {
+  background-color: #1a1a1a;
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #444444;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  width: 160px; /* Fixed width for all cards */
+  height: 150px; /* Adjusted height for images */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card p {
+  margin: 10px 0 0; /* Small margin above the text */
+  font-size: 16px;
+  text-align: center;
+}
+
+.card-image {
+  width: 100px; /* Set a fixed width for images */
+  height: 100px; /* Set a fixed height for images */
+  object-fit: contain; /* Ensure the image fits within the container */
+  margin-bottom: 10px;
+}
