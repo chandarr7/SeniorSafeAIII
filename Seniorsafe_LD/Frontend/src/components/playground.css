@@ -1,0 +1,142 @@
+/* Container for the entire page */
+.container {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  background-color: #000000; /* Black background for the entire layout */
+  color: white; /* White text */
+}
+
+/* Sidebar and Main content */
+.content {
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* Take remaining space after sidebar */
+  height: 100vh; /* Ensure content takes full height of the screen */
+  background-color: #000000; /* Black background for all content */
+  color: white; /* White text */
+}
+
+/* Main Content Layout */
+.main-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  background-color: #000000; /* Black background for main content */
+  color: white; /* White text */
+  overflow: hidden; /* Prevent content from overflowing */
+}
+
+/* Messages Section */
+.messages {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto; /* Enable scrolling for messages */
+  background-color: #000000; /* Black background */
+  border-bottom: none;
+}
+
+/* Navbar */
+.navbar {
+  background-color: #1a1a1a; /* Keep navbar color as dark gray */
+  color: white;
+  padding: 16px;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0; /* Prevent shrinking */
+  position: sticky;
+  top: 0; /* Stay at the top */
+  z-index: 10; /* Ensure it stays above other content */
+}
+
+/* Input Section */
+.input-container {
+  display: flex;
+  justify-content: center; /* Center the input and send button */
+  align-items: center;
+  padding: 16px;
+  background-color: #000000; /* Black background for input section */
+  position: sticky;
+  bottom: 0; /* Stick the input to the bottom of the screen */
+  z-index: 10;
+  width: 100%; /* Full width */
+  max-width: 800px; /* Max width of the entire container */
+  margin-left: auto;
+  margin-right: auto; /* Center the input container horizontally */
+}
+
+/* Message Input Field */
+.message-input {
+  flex: 1; /* Take up remaining space except for the send button */
+  padding: 10px 20px; /* Padding for the input */
+  border: 1px solid #444444;
+  border-radius: 30px; /* Rounded corners */
+  font-size: 14px;
+  background-color: #333333; /* Slight contrast with the black background */
+  color: white; /* White text */
+  height: 50px;
+  outline: none; /* Remove the square box around the input when focused */
+  box-sizing: border-box; /* Ensure padding and width are calculated properly */
+}
+
+.message-input::placeholder {
+  color: #888888; /* Placeholder text color */
+}
+
+/* Send Button */
+.send-button {
+  background-color: #34d399; /* Green background */
+  border: none;
+  border-radius: 50%; /* Round button */
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px; /* Space between input and button */
+  cursor: pointer;
+}
+
+.send-button:hover {
+  background-color: #059669; /* Darker green on hover */
+}
+
+.send-button .MuiSvgIcon-root {
+  color: white; /* White icon color */
+}
+
+/* Individual Message */
+.message-container {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  color: white; /* White text */
+}
+
+.message-name {
+  width: 100px;
+  font-size: 14px;
+  color: #34d399; /* Greenish color for the sender name */
+}
+
+/* Remove the boxes and background from the message box */
+.message-box {
+  flex: 1;
+  padding: 12px 0; /* Adjust padding to remove the box effect */
+  color: white; /* White text */
+  margin-right: 150px; /* Add gap on the right side */
+}
+
+.message-content {
+  margin: 0;
+  color: white; /* White text */
+}
+
+.message-date {
+  font-size: 12px;
+  color: #888888; /* Lighter gray for date */
+  margin-top: 8px;
+  display: block;
+}

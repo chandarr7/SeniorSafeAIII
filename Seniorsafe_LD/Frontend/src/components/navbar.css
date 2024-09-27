@@ -1,0 +1,32 @@
+/* Navbar Styles */
+.navbar {
+  background-color: #000000; /* Black background */
+  color: white; /* White text */
+  padding: 16px;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-brand {
+  font-size: 24px;
+  font-weight: bold;
+  color: white; /* White text */
+}
+
+.navbar-links {
+  display: flex;
+  gap: 16px;
+}
+
+.navbar-link {
+  background: none;
+  border: none;
+  color: white; /* White text for links */
+  cursor: pointer;
+}
+
+.navbar-link:hover {
+  text-decoration: underline;
+}

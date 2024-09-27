@@ -1,0 +1,44 @@
+/* src/signup.css */
+.signup-container {
+  width: 100%;
+  max-width: 400px;
+  margin: 100px auto;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #333; /* Dark background for the container */
+  text-align: center;
+  box-shadow: 0px 4px 6px rgba(255, 255, 255, 0.1); /* Subtle white shadow for depth */
+  color: #fff; /* White text color for readability */
+}
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.signup-form input {
+  padding: 10px;
+  background-color: #222; /* Even darker background for inputs */
+  border: 1px solid #555; /* Slightly lighter border for visibility */
+  color: #ddd; /* Light gray text, ensures readability */
+  border-radius: 5px;
+}
+
+.signup-form button {
+  padding: 10px;
+  background-color: #28a745; /* Green button for actions */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.signup-form button:hover {
+  background-color: #218838; /* Slightly darker green on hover */
+}
+
+.error {
+  color: #ff5555; /* Bright red for errors to stand out well */
+  font-size: 14px;
+}
