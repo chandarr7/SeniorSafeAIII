@@ -7,33 +7,25 @@ import { Cards } from "./card";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import StopCircleRoundedIcon from "@mui/icons-material/StopCircleRounded";
 import { firestore, auth } from "./firebase";
-import { useTheme } from "./theme"; // Import useTheme
-
 import {
   collection,
   addDoc,
   doc,
   getDoc,
-  deleteDoc,
   query,
   where,
   getDocs,
 } from "firebase/firestore";
 
-let val = 0;
-let chaid;
-let cal1 = 0;
-
 export function Playground() {
   const [inputValue, setInputValue] = useState("");
-  const { theme } = useTheme(); // Access theme
   const [isSending, setIsSending] = useState(false);
   const [chatStarted, setChatStarted] = useState(false);
-  const [localMessages, setLocalMessages] = useState([]); // Current chat messages
-  const [historia, setHistoria] = useState([]); // Messages loaded from Firebase
+  const [localMessages, setLocalMessages] = useState([]);
   const [chatHistories, setChatHistories] = useState([]);
   const [userId, setUserId] = useState(null);
   const [currentChatId, setCurrentChatId] = useState(null);
+  const [isProcessing, setIsProcessing] = useState(false); // Track if an operation is ongoing
 
   const { sendMessage, stopTask, clear } = useChatInteract();
   const { messages } = useChatMessages();
@@ -74,9 +66,7 @@ export function Playground() {
         const newChat = {
           userId,
           messages: localMessages,
-          title:
-            localMessages[0].output ||
-            `Chat Session ${chatHistories.length + 1}`,
+          title: `Chat Session ${chatHistories.length + 1}`,
           createdAt: new Date(),
         };
         const chatRef = await addDoc(
@@ -105,7 +95,6 @@ export function Playground() {
     }
 
     if (content) {
-      cal1 = 1;
       setIsSending(true);
       const message = {
         name: "user",
@@ -155,59 +144,34 @@ export function Playground() {
   };
 
   const resetChat = async () => {
-    // if (isProcessing) return;
-    //setIsProcessing(true);
+    // Prevent multiple clicks
+    if (isProcessing) return;
+    setIsProcessing(true);
 
     try {
-      val = 0;
-      if (cal1 == 1) {
-        const savedSuccessfully = await saveChatToFirebase();
-        cal1 = 0;
+      // Save the chat first
+      const savedSuccessfully = await saveChatToFirebase();
+      if (savedSuccessfully) {
+        // Once saved, stop the task and reset the chat
+        await handleStopTask();
+        setChatStarted(false);
+        setLocalMessages([]); // Clear the messages
+        setInputValue(""); // Clear the input
+        await clear(); // Clear the backend chat session
       }
-      //  if (savedSuccessfully) {
-      await handleStopTask();
-      setChatStarted(false);
-      setLocalMessages([]);
-      setHistoria([]); // Clear historia when resetting chat
-      setInputValue("");
-      await clear();
-      //}
     } finally {
-      // setIsProcessing(false);
-      console.log("hi");
+      setIsProcessing(false); // Ensure this is reset to allow future actions
     }
   };
-  // Function to handle chat deletion
-  const handleDeleteChat = async (chatId) => {
-    try {
-      // Delete the chat document from Firebase
-      await deleteDoc(doc(firestore, "chatHistories", chatId));
 
-      // Update local chat histories after deletion
-      setChatHistories((prevHistories) =>
-        prevHistories.filter((history) => history.id !== chatId)
-      );
-      cal1 = 0;
-      resetChat();
-    } catch (error) {
-      console.error("Error deleting chat history:", error);
-    }
-  };
   const loadChatFromFirebase = async (chatId) => {
     try {
-      await setLocalMessages([]);
-      await handleStopTask();
-      await setHistoria([]);
-      await clear();
-      val = 1;
-      chaid = chatId;
       const chatRef = doc(firestore, "chatHistories", chatId);
       const chatDoc = await getDoc(chatRef);
 
       if (chatDoc.exists()) {
         const chatData = chatDoc.data();
-        setHistoria(chatData.messages || []); // Load messages from Firebase into 'historia'
-        setLocalMessages([]); // Clear local messages for the new session
+        setLocalMessages(chatData.messages || []);
         setChatStarted(true);
         setCurrentChatId(chatId);
       } else {
@@ -217,58 +181,31 @@ export function Playground() {
       console.error("Error loading chat from Firebase:", error);
     }
   };
-  const handlechats = async (chatId) => {
-    if (cal1 == 1) {
-      await saveChatToFirebase();
-    }
-    loadChatFromFirebase(chatId);
-  };
+
   return (
-    <div className={`container ${theme}`}>
+    <div className="container">
       <Sidebar
         chatHistories={chatHistories}
-        onSelectChat={handlechats}
+        onSelectChat={loadChatFromFirebase}
         onNewChat={resetChat}
-        onDeleteChat={handleDeleteChat} // Pass the delete handler to Sidebar
       />
 
-      <div className={`content ${theme}`}>
+      <div className="content">
         <Navbar />
-        <div className={`main-content ${theme}`}>
+        <div className="main-content">
           {!chatStarted && <Cards onCardClick={startChat} />}
 
-          <div className={`messages ${theme}`}>
-            {/* Display messages from 'historia' if val == 1 */}
-            {val === 1 &&
-              historia
-                .filter((message) => !shouldSkipMessage(message))
-                .map((message, index) => (
-                  <div key={index} className={`message-container ${theme}`}>
-                    <div className={`message-name ${theme}`}>
-                      {message.name}
-                    </div>
-                    <div className={`message-box ${theme}`}>
-                      <p className={`message-content ${theme}`}>
-                        {cleanMessageOutput(message.output)}
-                      </p>
-                      <small className={`message-date ${theme}`}>
-                        {new Date(message.createdAt).toLocaleTimeString()}
-                      </small>
-                    </div>
-                  </div>
-                ))}
-
-            {/* Append localMessages to the display */}
+          <div className="messages">
             {localMessages
               .filter((message) => !shouldSkipMessage(message))
               .map((message, index) => (
-                <div key={index} className={`message-container {theme}`}>
-                  <div className={`message-name ${theme}`}>{message.name}</div>
-                  <div className={`message-box ${theme}`}>
-                    <p className={`message-content ${theme}`}>
+                <div key={index} className="message-container">
+                  <div className="message-name">{message.name}</div>
+                  <div className="message-box">
+                    <p className="message-content">
                       {cleanMessageOutput(message.output)}
                     </p>
-                    <small className={`message-date ${theme}`}>
+                    <small className="message-date">
                       {new Date(message.createdAt).toLocaleTimeString()}
                     </small>
                   </div>
@@ -276,10 +213,10 @@ export function Playground() {
               ))}
           </div>
 
-          <div className={`input-container {theme}`}>
+          <div className="input-container">
             <input
               autoFocus
-              className={`message-input ${theme}`}
+              className="message-input"
               placeholder="Type a message"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
@@ -294,7 +231,7 @@ export function Playground() {
               onClick={
                 isSending ? handleStopTask : () => handleSendMessage(inputValue)
               }
-              className={`send-button ${theme}`}
+              className="send-button"
               disabled={isSending && !stopTask}
             >
               {isSending ? (

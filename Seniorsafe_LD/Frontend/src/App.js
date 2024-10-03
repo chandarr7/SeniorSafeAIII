@@ -14,7 +14,7 @@ import { sessionState, useChatSession } from "@chainlit/react-client";
 //import { Playground } from "./components/playground";
 import { useRecoilValue } from "recoil";
 import { Playground } from "./components/playground";
-
+import { ThemeProvider } from "./components/theme"; // Import ThemeProvider
 const userEnv = {};
 
 function App() {
@@ -55,20 +55,22 @@ function App() {
     return <p>Error: {error.message}</p>; // Show error if there's a problem with auth
   }
   return (
-    <Router>
-      <Routes>
-        <Route
-          path="/"
-          element={user ? <Navigate to="/playground" /> : <Login />}
-        />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/password" element={<Password />} />
-        <Route
-          path="/playground"
-          element={user ? <Playground /> : <Navigate to="/" />}
-        />
-      </Routes>
-    </Router>
+    <ThemeProvider>
+      <Router>
+        <Routes>
+          <Route
+            path="/"
+            element={user ? <Navigate to="/playground" /> : <Login />}
+          />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/password" element={<Password />} />
+          <Route
+            path="/playground"
+            element={user ? <Playground /> : <Navigate to="/" />}
+          />
+        </Routes>
+      </Router>
+    </ThemeProvider>
   );
 }
 

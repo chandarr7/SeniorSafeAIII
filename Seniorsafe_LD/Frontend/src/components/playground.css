@@ -1,63 +1,46 @@
-/* Container for the entire page */
+/* Common Styles */
 .container {
   display: flex;
   flex-direction: row;
   height: 100vh;
-  background-color: #000000; /* Black background for the entire layout */
-  color: white; /* White text */
 }
 
-/* Sidebar and Main content */
 .content {
   display: flex;
   flex-direction: column;
-  flex: 1; /* Take remaining space after sidebar */
-  height: 100vh; /* Ensure content takes full height of the screen */
-  background-color: #000000; /* Black background for all content */
-  color: white; /* White text */
+  flex: 1;
+  height: 100vh;
 }
 
-/* Main Content Layout */
 .main-content {
   display: flex;
   flex-direction: column;
   flex: 1;
-  background-color: #000000; /* Black background for main content */
-  color: white; /* White text */
-  overflow: hidden; /* Prevent content from overflowing */
+  overflow: hidden;
 }
 
-/* Messages Section */
 .messages {
   flex: 1;
   padding: 16px;
   overflow-y: auto; /* Enable scrolling for messages */
-  background-color: #000000; /* Black background */
-  border-bottom: none;
 }
 
-/* Navbar */
 .navbar {
-  background-color: #1a1a1a; /* Keep navbar color as dark gray */
-  color: white;
   padding: 16px;
   text-align: left;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-shrink: 0; /* Prevent shrinking */
   position: sticky;
-  top: 0; /* Stay at the top */
+  top: 0;
   z-index: 10; /* Ensure it stays above other content */
 }
 
-/* Input Section */
 .input-container {
   display: flex;
   justify-content: center; /* Center the input and send button */
   align-items: center;
   padding: 16px;
-  background-color: #000000; /* Black background for input section */
   position: sticky;
   bottom: 0; /* Stick the input to the bottom of the screen */
   z-index: 10;
@@ -67,76 +50,170 @@
   margin-right: auto; /* Center the input container horizontally */
 }
 
-/* Message Input Field */
+.message-container {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.message-box {
+  flex: 1;
+  padding: 12px 0;
+  margin-right: 150px;
+}
+
 .message-input {
-  flex: 1; /* Take up remaining space except for the send button */
-  padding: 10px 20px; /* Padding for the input */
-  border: 1px solid #444444;
-  border-radius: 30px; /* Rounded corners */
+  flex: 1;
+  padding: 10px 20px;
+  border-radius: 30px;
   font-size: 14px;
-  background-color: #333333; /* Slight contrast with the black background */
-  color: white; /* White text */
   height: 50px;
-  outline: none; /* Remove the square box around the input when focused */
-  box-sizing: border-box; /* Ensure padding and width are calculated properly */
+  outline: none;
+  box-sizing: border-box;
 }
 
-.message-input::placeholder {
-  color: #888888; /* Placeholder text color */
-}
-
-/* Send Button */
 .send-button {
-  background-color: #34d399; /* Green background */
   border: none;
-  border-radius: 50%; /* Round button */
+  border-radius: 50%;
   width: 50px;
   height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: 10px; /* Space between input and button */
+  margin-left: 10px;
   cursor: pointer;
 }
 
-.send-button:hover {
-  background-color: #059669; /* Darker green on hover */
-}
-
 .send-button .MuiSvgIcon-root {
-  color: white; /* White icon color */
+  color: white;
 }
 
-/* Individual Message */
-.message-container {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 16px;
-  color: white; /* White text */
+/* Light Theme Styles */
+.container.light {
+  background-color: #ffffff;
+  color: #000000;
 }
 
-.message-name {
-  width: 100px;
-  font-size: 14px;
-  color: #34d399; /* Greenish color for the sender name */
+.content.light {
+  background-color: #ffffff;
+  color: #000000;
 }
 
-/* Remove the boxes and background from the message box */
-.message-box {
-  flex: 1;
-  padding: 12px 0; /* Adjust padding to remove the box effect */
-  color: white; /* White text */
-  margin-right: 150px; /* Add gap on the right side */
+.main-content.light {
+  background-color: #ffffff;
+  color: #000000;
 }
 
-.message-content {
-  margin: 0;
-  color: white; /* White text */
+.messages.light {
+  background-color: #ffffff;
+  color: #000000;
 }
 
-.message-date {
-  font-size: 12px;
-  color: #888888; /* Lighter gray for date */
-  margin-top: 8px;
-  display: block;
+.navbar.light {
+  background-color: #f0f0f0;
+  color: #000000;
+}
+
+.input-container.light {
+  background-color: #f0f0f0;
+  color: #000000;
+}
+
+.message-input.light {
+  background-color: #e0e0e0;
+  color: #000000;
+  border: 1px solid #cccccc;
+}
+
+.message-container.light {
+  color: #000000;
+}
+
+.message-box.light {
+  color: #000000;
+}
+
+.message-content.light {
+  color: #000000;
+}
+
+.message-name.light {
+  color: #34d399; /* Keeping the same greenish color for sender name */
+}
+
+.message-date.light {
+  color: #555555; /* Darker gray for the date in light mode */
+}
+
+.send-button.light {
+  background-color: #34d399;
+}
+
+.send-button.light:hover {
+  background-color: #059669;
+}
+
+/* Dark Theme Styles */
+.container.dark {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+.content.dark {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+.main-content.dark {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+.messages.dark {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+.navbar.dark {
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+
+.input-container.dark {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+.message-input.dark {
+  background-color: #333333;
+  color: #ffffff;
+  border: 1px solid #444444;
+}
+
+.message-container.dark {
+  color: #ffffff;
+}
+
+.message-box.dark {
+  color: #ffffff;
+}
+
+.message-content.dark {
+  color: #ffffff;
+}
+
+.message-name.dark {
+  color: #34d399; /* Greenish color for sender name in dark mode */
+}
+
+.message-date.dark {
+  color: #888888; /* Lighter gray for date in dark mode */
+}
+
+.send-button.dark {
+  background-color: #34d399;
+}
+
+.send-button.dark:hover {
+  background-color: #059669;
 }

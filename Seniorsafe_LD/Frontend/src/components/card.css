@@ -1,4 +1,4 @@
-/* src/card.css */
+/* Common Styles */
 .cards-container {
   display: flex;
   justify-content: center;
@@ -9,11 +9,9 @@
 }
 
 .card {
-  background-color: #1a1a1a;
-  color: white;
   padding: 20px;
   border-radius: 8px;
-  border: 1px solid #444444;
+  border: 1px solid;
   cursor: pointer;
   transition: transform 0.3s ease;
   width: 160px; /* Fixed width for all cards */
@@ -40,4 +38,50 @@
   height: 100px; /* Set a fixed height for images */
   object-fit: contain; /* Ensure the image fits within the container */
   margin-bottom: 10px;
+}
+
+/* Light Theme */
+.cards-container.light {
+  background-color: #ffffff;
+}
+
+.card.light {
+  background-color: #f0f0f0;
+  color: #000000;
+  border: 1px solid #cccccc;
+}
+
+.card.light:hover {
+  transform: scale(1.05);
+}
+
+.card.light p {
+  color: #000000;
+}
+
+.card-image.light {
+  background-color: #f0f0f0;
+}
+
+/* Dark Theme */
+.cards-container.dark {
+  background-color: #000000;
+}
+
+.card.dark {
+  background-color: #1a1a1a;
+  color: #ffffff;
+  border: 1px solid #444444;
+}
+
+.card.dark:hover {
+  transform: scale(1.05);
+}
+
+.card.dark p {
+  color: #ffffff;
+}
+
+.card-image.dark {
+  background-color: #1a1a1a;
 }
