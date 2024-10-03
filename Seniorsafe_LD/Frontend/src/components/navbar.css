@@ -17,7 +17,8 @@
 
 .navbar-links {
   display: flex;
-  gap: 16px;
+  gap: 24px; /* Increased gap between the theme toggle and profile */
+  align-items: center; /* Ensure icons align vertically */
 }
 
 .navbar-link {
@@ -29,4 +30,41 @@
 
 .navbar-link:hover {
   text-decoration: underline;
+}
+
+.theme-toggle {
+  background: none;
+  border: none;
+  color: white; /* White color for the theme icon */
+  cursor: pointer;
+  font-size: 24px;
+  margin-right: 30px; /* Added right margin to move it away from the profile */
+}
+
+/* Light Mode Styles */
+.navbar.light {
+  background-color: white;
+  color: #000000;
+}
+
+.navbar.light .navbar-brand {
+  color: #000000;
+}
+
+.navbar.light .theme-toggle {
+  color: #000000;
+}
+
+/* Dark Mode Styles */
+.navbar.dark {
+  background-color: black;
+  color: #ffffff;
+}
+
+.navbar.dark .navbar-brand {
+  color: #ffffff;
+}
+
+.navbar.dark .theme-toggle {
+  color: #ffffff;
 }

@@ -1,10 +1,11 @@
 // src/Card.js
 import React from "react";
 import "./card.css";
-
+import { useTheme } from "./theme"; // Import useTheme
 export function Card({ label, image, onClick }) {
+  const { theme } = useTheme(); // Access theme
   return (
-    <div className="card" onClick={onClick}>
+    <div className={`card ${theme}`} onClick={onClick}>
       <img src={image} alt={label} className="card-image" />
       <p>{label}</p>
     </div>
@@ -12,6 +13,7 @@ export function Card({ label, image, onClick }) {
 }
 
 export function Cards({ onCardClick }) {
+  const { theme } = useTheme(); // Access theme
   const cardData = [
     {
       label: "Identity stolen",
@@ -37,7 +39,7 @@ export function Cards({ onCardClick }) {
   ];
 
   return (
-    <div className="cards-container">
+    <div className={`cards-container ${theme}`}>
       {cardData.map((card, index) => (
         <Card
           key={index}
