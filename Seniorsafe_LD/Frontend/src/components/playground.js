@@ -17,12 +17,12 @@ import {
   deleteDoc,
   query,
   where,
+  updateDoc,
   getDocs,
 } from "firebase/firestore";
 
-let val = 0;
-let chaid;
-let cal1 = 0;
+//let val = 0;
+//let chaid;
 
 export function Playground() {
   const [inputValue, setInputValue] = useState("");
@@ -34,9 +34,11 @@ export function Playground() {
   const [chatHistories, setChatHistories] = useState([]);
   const [userId, setUserId] = useState(null);
   const [currentChatId, setCurrentChatId] = useState(null);
-
+  const [cal1, setcal1] = useState(0);
   const { sendMessage, stopTask, clear } = useChatInteract();
   const { messages } = useChatMessages();
+  const [chaid, setChaid] = useState(null);
+  const [val, setval] = useState(0);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -67,30 +69,72 @@ export function Playground() {
       console.error("Error loading chat histories:", error);
     }
   };
+  const removeUndefinedFields = (obj) => {
+    if (Array.isArray(obj)) {
+      return obj.map(removeUndefinedFields); // Clean arrays recursively
+    } else if (obj !== null && typeof obj === "object") {
+      return Object.fromEntries(
+        Object.entries(obj)
+          .filter(([_, v]) => v !== undefined) // Remove undefined fields
+          .map(([k, v]) => [k, removeUndefinedFields(v)]) // Clean nested objects
+      );
+    }
+    return obj;
+  };
 
   const saveChatToFirebase = async () => {
     if (localMessages.length > 0 && userId) {
       try {
-        const newChat = {
-          userId,
-          messages: localMessages,
-          title:
-            localMessages[0].output ||
-            `Chat Session ${chatHistories.length + 1}`,
-          createdAt: new Date(),
-        };
-        const chatRef = await addDoc(
-          collection(firestore, "chatHistories"),
-          newChat
-        );
-        const newChatId = chatRef.id;
+        // Clean messages array
+        const cleanedMessages = localMessages.map(removeUndefinedFields);
+        if (val === 1 && chaid) {
+          // Append to existing chat when val === 1
+          const chatRef = doc(firestore, "chatHistories", chaid);
+          const chatDoc = await getDoc(chatRef);
 
-        setChatHistories((prevHistories) => [
-          ...prevHistories,
-          { id: newChatId, title: newChat.title },
-        ]);
-        setCurrentChatId(newChatId);
-        return true;
+          if (chatDoc.exists()) {
+            const existingMessages = chatDoc.data().messages || [];
+            const updatedMessages = [...existingMessages, ...cleanedMessages];
+
+            // Update the document with new messages
+            await updateDoc(chatRef, { messages: updatedMessages });
+
+            console.log("Appended messages to existing chat:", chaid);
+          } else {
+            console.error("No such chat history found for chaid:", chaid);
+          }
+        } else {
+          const newChat = {
+            userId: userId || "unknownUser", // Ensure userId is valid
+            messages: cleanedMessages, // Use cleaned messages array
+            title:
+              (cleanedMessages[0] && cleanedMessages[0].output) ||
+              `Chat Session ${chatHistories.length + 1}`, // Fallback title
+            createdAt: new Date(),
+          };
+
+          // Log the cleaned data to ensure it's properly formatted
+          console.log(
+            "Attempting to save cleaned chat data to Firebase:",
+            newChat
+          );
+          console.log("Contents of 'historia' before saving:", historia);
+
+          const chatRef = await addDoc(
+            collection(firestore, "chatHistories"),
+            newChat
+          );
+          const newChatId = chatRef.id;
+
+          // Update chatHistories and set current chat ID
+          setChatHistories((prevHistories) => [
+            ...prevHistories,
+            { id: newChatId, title: newChat.title },
+          ]);
+          setCurrentChatId(newChatId);
+
+          return true;
+        }
       } catch (error) {
         console.error("Error saving chat to Firebase:", error);
         return false;
@@ -105,7 +149,7 @@ export function Playground() {
     }
 
     if (content) {
-      cal1 = 1;
+      setcal1(1);
       setIsSending(true);
       const message = {
         name: "user",
@@ -159,11 +203,15 @@ export function Playground() {
     //setIsProcessing(true);
 
     try {
-      val = 0;
-      if (cal1 == 1) {
+      if (cal1 === 1) {
         const savedSuccessfully = await saveChatToFirebase();
-        cal1 = 0;
+        if (savedSuccessfully) {
+          setval(0);
+        }
+
+        setcal1(0);
       }
+
       //  if (savedSuccessfully) {
       await handleStopTask();
       setChatStarted(false);
@@ -177,6 +225,7 @@ export function Playground() {
       console.log("hi");
     }
   };
+
   // Function to handle chat deletion
   const handleDeleteChat = async (chatId) => {
     try {
@@ -187,7 +236,7 @@ export function Playground() {
       setChatHistories((prevHistories) =>
         prevHistories.filter((history) => history.id !== chatId)
       );
-      cal1 = 0;
+      setcal1(0);
       resetChat();
     } catch (error) {
       console.error("Error deleting chat history:", error);
@@ -199,8 +248,8 @@ export function Playground() {
       await handleStopTask();
       await setHistoria([]);
       await clear();
-      val = 1;
-      chaid = chatId;
+      setval(1);
+      setChaid(chatId);
       const chatRef = doc(firestore, "chatHistories", chatId);
       const chatDoc = await getDoc(chatRef);
 
@@ -218,7 +267,7 @@ export function Playground() {
     }
   };
   const handlechats = async (chatId) => {
-    if (cal1 == 1) {
+    if (cal1 === 1) {
       await saveChatToFirebase();
     }
     loadChatFromFirebase(chatId);
