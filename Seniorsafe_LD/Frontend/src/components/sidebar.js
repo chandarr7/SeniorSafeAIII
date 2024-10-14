@@ -40,7 +40,13 @@ export function Sidebar({
                     className={`chat-history-item ${theme}`}
                     onClick={() => onSelectChat(history.id)}
                   >
-                    {history.title}
+                    <span className="chat-history-title">
+                      {" "}
+                      {history.title.length > 15
+                        ? `${history.title.substring(0, 15)}...`
+                        : history.title}
+                    </span>{" "}
+                    {/* Wrap in span */}
                   </li>
                   <DeleteIcon
                     style={{ marginLeft: "10px", cursor: "pointer" }}

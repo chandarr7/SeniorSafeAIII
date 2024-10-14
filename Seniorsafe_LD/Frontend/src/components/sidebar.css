@@ -57,6 +57,7 @@
   flex-direction: column;
   align-items: center; /* Horizontally center the chat items */
   overflow-y: auto; /* Enable vertical scrolling */
+  overflow-x: hidden;
 }
 
 .sidebar.closed .sidebar-content {
@@ -94,7 +95,9 @@ ul {
   text-align: left;
   display: flex;
   align-items: center; /* Ensure content inside is vertically centered */
-  height: 10px; /* Set a consistent height for chat items */
+  height: auto; /* Set a consistent height for chat items */
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .chat-history-item:hover {
@@ -102,7 +105,10 @@ ul {
 }
 
 .chat-history-item span {
-  flex-grow: 1; /* Make the text fill the available space */
+  flex-grow: 0; /* Make the text fill the available space */
+  white-space: nowrap; /* Prevent text wrapping */
+  overflow: hidden; /* Hide overflowing text */
+  text-overflow: ellipsis; /* Add ellipsis when text overflows */
 }
 
 .delete-icon {
@@ -157,4 +163,11 @@ ul {
 
 .sidebar.dark h3 {
   color: #ffffff;
+}
+.chat-history-title {
+  white-space: nowrap; /* Prevent text from wrapping */
+  overflow: hidden; /* Hide overflowing text */
+  text-overflow: ellipsis; /* Add ellipsis when text overflows */
+  display: block;
+  max-width: 100%; /* Ensure the title stays within its container */
 }
