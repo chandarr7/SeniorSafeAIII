@@ -227,11 +227,26 @@ export function Playground() {
         // saveChatToFirebase();
         setIsSending(false);
       }
+      if (lastMessage.output.includes("<br>")) {
+        console.log("Message contains line breaks.");
+      }
+      if (lastMessage.output.includes("<b>")) {
+        console.log("Message contains bold text.");
+      }
+
       setLocalMessages([...messages]);
     }
   }, [messages]);
 
   const cleanMessageOutput = (output) => {
+    // Add line break before '<number>. **'
+    output = output.replace(/(\d+\.\s*\*\*)/g, "<br/><br/>$1");
+    output = output.replace(/(\b[A-Z][a-zA-Z]*\b)(:)/g, "<br/><br/>$1$2");
+    output = output.replace(/(\.\s*)([a-z]+)(:)/g, "$1<br/>$2$3");
+    // Replace **text** with <strong>text</strong>
+    output = output.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+
+    // Remove the custom end marker
     return output.replace("&*&8", "");
   };
 
@@ -344,9 +359,12 @@ export function Playground() {
                       {message.name}
                     </div>
                     <div className={`message-box ${theme}`}>
-                      <p className={`message-content ${theme}`}>
-                        {cleanMessageOutput(message.output)}
-                      </p>
+                      <p
+                        className={`message-content ${theme}`}
+                        dangerouslySetInnerHTML={{
+                          __html: cleanMessageOutput(message.output),
+                        }}
+                      />
                       <small className={`message-date ${theme}`}>
                         {new Date(message.createdAt).toLocaleTimeString()}
                       </small>
@@ -358,12 +376,15 @@ export function Playground() {
             {localMessages
               .filter((message) => !shouldSkipMessage(message))
               .map((message, index) => (
-                <div key={index} className={`message-container {theme}`}>
+                <div key={index} className={`message-container ${theme}`}>
                   <div className={`message-name ${theme}`}>{message.name}</div>
                   <div className={`message-box ${theme}`}>
-                    <p className={`message-content ${theme}`}>
-                      {cleanMessageOutput(message.output)}
-                    </p>
+                    <p
+                      className={`message-content ${theme}`}
+                      dangerouslySetInnerHTML={{
+                        __html: cleanMessageOutput(message.output),
+                      }}
+                    />
                     <small className={`message-date ${theme}`}>
                       {new Date(message.createdAt).toLocaleTimeString()}
                     </small>
