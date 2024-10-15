@@ -39,6 +39,13 @@ export function Playground() {
   const { messages } = useChatMessages();
   const [chaid, setChaid] = useState(null);
   const [val, setval] = useState(0);
+  const [k, setk] = useState(0);
+  const [serveMessage, setServeMessage] = useState([]);
+  const [userMessage, setuserMessage] = useState({
+    name: "user",
+    type: "user_message",
+    output: "",
+  });
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -81,28 +88,24 @@ export function Playground() {
     }
     return obj;
   };
+  useEffect(() => {
+    // setval(1);
+    if (userMessage.output) {
+      console.log("inside u");
+      saveMessage();
+      //setuserMessage({ name: "user", type: "user_message", output: "" });
+      setk(1);
+      // setuserMessage([]);
+    }
+  }, [userMessage]);
+  const saveMessage = async () => {
+    console.log("inside s");
+    if (userMessage.output && userId) {
+      console.log("inside s1");
 
-  const saveChatToFirebase = async () => {
-    if (localMessages.length > 0 && userId) {
       try {
-        // Clean messages array
-        const cleanedMessages = localMessages.map(removeUndefinedFields);
-        if (val === 1 && chaid) {
-          // Append to existing chat when val === 1
-          const chatRef = doc(firestore, "chatHistories", chaid);
-          const chatDoc = await getDoc(chatRef);
-
-          if (chatDoc.exists()) {
-            const existingMessages = chatDoc.data().messages || [];
-            const updatedMessages = [...existingMessages, ...cleanedMessages];
-
-            // Update the document with new messages
-            await updateDoc(chatRef, { messages: updatedMessages });
-
-            console.log("Appended messages to existing chat:", chaid);
-          } else {
-            console.error("No such chat history found for chaid:", chaid);
-          }
+        const cleanedMessages = [removeUndefinedFields(userMessage)];
+        if (k === 1 && chaid) {
         } else {
           const newChat = {
             userId: userId || "unknownUser", // Ensure userId is valid
@@ -112,8 +115,6 @@ export function Playground() {
               `Chat Session ${chatHistories.length + 1}`, // Fallback title
             createdAt: new Date(),
           };
-
-          // Log the cleaned data to ensure it's properly formatted
           console.log(
             "Attempting to save cleaned chat data to Firebase:",
             newChat
@@ -132,7 +133,9 @@ export function Playground() {
             { id: newChatId, title: newChat.title },
           ]);
           setCurrentChatId(newChatId);
-
+          setChaid(newChatId);
+          setk(1);
+          console.log(chaid);
           return true;
         }
       } catch (error) {
@@ -157,6 +160,9 @@ export function Playground() {
         output: content,
       };
       try {
+        //console.log("message is",localMessages[localMessages.length - 1]);
+        // await saveServeChanges();
+        setuserMessage(message);
         await sendMessage(message, []);
         setLocalMessages((prevMessages) => [...prevMessages, message]);
       } catch (error) {
@@ -169,23 +175,78 @@ export function Playground() {
   const handleStopTask = async () => {
     try {
       await stopTask();
+      //saveChatToFirebase();
       setIsSending(false);
     } catch (error) {
       console.error("Error stopping task:", error);
     }
   };
+  const saveChatToFirebase = async () => {
+    if (localMessages.length > 0 && userId) {
+      try {
+        // Clean messages array
+        const cleanedMessages = localMessages.map(removeUndefinedFields);
+        if (val === 1 && chaid) {
+          // Append to existing chat when val === 1
+          const chatRef = doc(firestore, "chatHistories", chaid);
+          const chatDoc = await getDoc(chatRef);
 
+          if (chatDoc.exists()) {
+            const existingMessages = chatDoc.data().messages || [];
+            const updatedMessages = [...historia, ...cleanedMessages];
+
+            // Update the document with new messages
+            await updateDoc(chatRef, { messages: updatedMessages });
+
+            console.log("Appended messages to existing chat:", chaid);
+          } else {
+            console.error("No such chat history found for chaid:", chaid);
+          }
+        } else {
+          if (chaid != null) {
+            const chatRef = doc(firestore, "chatHistories", chaid);
+            await updateDoc(chatRef, { messages: cleanedMessages });
+            console.log("Overwritten messages in existing chat:", chaid);
+          }
+        }
+      } catch (error) {
+        console.error("Error saving chat to Firebase:", error);
+        return false;
+      }
+
+      return true; // Proceed if no messages to save
+    }
+  };
   useEffect(() => {
     if (messages.length > 0) {
       const lastMessage = messages[messages.length - 1];
+      // console.log("message:recieved is", messages);
+      //console.log("local message is", localMessages);
+      saveChatToFirebase();
       if (lastMessage.output.includes("&*&8")) {
+        // saveChatToFirebase();
         setIsSending(false);
       }
+      if (lastMessage.output.includes("<br>")) {
+        console.log("Message contains line breaks.");
+      }
+      if (lastMessage.output.includes("<b>")) {
+        console.log("Message contains bold text.");
+      }
+
       setLocalMessages([...messages]);
     }
   }, [messages]);
 
   const cleanMessageOutput = (output) => {
+    // Add line break before '<number>. **'
+    output = output.replace(/(\d+\.\s*\*\*)/g, "<br/><br/>$1");
+    output = output.replace(/(\b[A-Z][a-zA-Z]*\b)(:)/g, "<br/><br/>$1$2");
+    output = output.replace(/(\.\s*)([a-z]+)(:)/g, "$1<br/>$2$3");
+    // Replace **text** with <strong>text</strong>
+    output = output.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+
+    // Remove the custom end marker
     return output.replace("&*&8", "");
   };
 
@@ -203,17 +264,18 @@ export function Playground() {
     //setIsProcessing(true);
 
     try {
-      if (cal1 === 1) {
-        const savedSuccessfully = await saveChatToFirebase();
-        if (savedSuccessfully) {
-          setval(0);
-        }
+      // if (cal1 === 1) {
+      // const savedSuccessfully = await saveChatToFirebase();
+      //if (savedSuccessfully) {
+      setval(0);
+      //}
 
-        setcal1(0);
-      }
+      //setcal1(0);
+      // }
 
       //  if (savedSuccessfully) {
       await handleStopTask();
+      setChaid(null);
       setChatStarted(false);
       setLocalMessages([]);
       setHistoria([]); // Clear historia when resetting chat
@@ -231,7 +293,7 @@ export function Playground() {
     try {
       // Delete the chat document from Firebase
       await deleteDoc(doc(firestore, "chatHistories", chatId));
-
+      setChaid(null);
       // Update local chat histories after deletion
       setChatHistories((prevHistories) =>
         prevHistories.filter((history) => history.id !== chatId)
@@ -267,9 +329,9 @@ export function Playground() {
     }
   };
   const handlechats = async (chatId) => {
-    if (cal1 === 1) {
-      await saveChatToFirebase();
-    }
+    // if (cal1 === 1) {
+    // await saveChatToFirebase();
+    //}
     loadChatFromFirebase(chatId);
   };
   return (
@@ -297,9 +359,12 @@ export function Playground() {
                       {message.name}
                     </div>
                     <div className={`message-box ${theme}`}>
-                      <p className={`message-content ${theme}`}>
-                        {cleanMessageOutput(message.output)}
-                      </p>
+                      <p
+                        className={`message-content ${theme}`}
+                        dangerouslySetInnerHTML={{
+                          __html: cleanMessageOutput(message.output),
+                        }}
+                      />
                       <small className={`message-date ${theme}`}>
                         {new Date(message.createdAt).toLocaleTimeString()}
                       </small>
@@ -311,12 +376,15 @@ export function Playground() {
             {localMessages
               .filter((message) => !shouldSkipMessage(message))
               .map((message, index) => (
-                <div key={index} className={`message-container {theme}`}>
+                <div key={index} className={`message-container ${theme}`}>
                   <div className={`message-name ${theme}`}>{message.name}</div>
                   <div className={`message-box ${theme}`}>
-                    <p className={`message-content ${theme}`}>
-                      {cleanMessageOutput(message.output)}
-                    </p>
+                    <p
+                      className={`message-content ${theme}`}
+                      dangerouslySetInnerHTML={{
+                        __html: cleanMessageOutput(message.output),
+                      }}
+                    />
                     <small className={`message-date ${theme}`}>
                       {new Date(message.createdAt).toLocaleTimeString()}
                     </small>
