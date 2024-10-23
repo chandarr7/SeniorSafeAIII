@@ -240,11 +240,18 @@ export function Playground() {
 
   const cleanMessageOutput = (output) => {
     // Add line break before '<number>. **'
-    output = output.replace(/(\d+\.\s*\*\*)/g, "<br/><br/>$1");
-    output = output.replace(/(\b[A-Z][a-zA-Z]*\b)(:)/g, "<br/><br/>$1$2");
-    output = output.replace(/(\.\s*)([a-z]+)(:)/g, "$1<br/>$2$3");
+    output = output.replace(/(\d+\.\s*\*\*)/g, "<br/>$1");
+    output = output.replace(/(\b[A-Z][a-zA-Z]*\b)(:)/g, "<br/>$1$2");
+    // Add two line breaks before any '<number>. **' or '<number>.'
+    output = output.replace(/(\d+\.\s*\*\*|\d+\.\s*)/g, "<br/>$1");
+    //output = output.replace(/(\.\s*)([a-z]+)(:)/g, "$1<br/>$2$3");
+
     // Replace **text** with <strong>text</strong>
     output = output.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+    output = output.replace(
+      /(\d+\.\s*)([A-Za-z\s]+)(:)/g,
+      "$1<strong>$2</strong>$3"
+    );
 
     // Remove the custom end marker
     return output.replace("&*&8", "");

@@ -24,7 +24,7 @@ async def root():
 @app.get("/custom-auth")
 async def custom_auth():
     print("hello")
-    return JSONResponse({"token": "helloidot"})
+    return JSONResponse({"token": "message Recieved"})
 
 # Mount Chainlit without 'allow_origins'
 mount_chainlit(

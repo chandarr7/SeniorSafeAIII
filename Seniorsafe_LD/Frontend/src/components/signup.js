@@ -47,6 +47,9 @@ export function Signup() {
   return (
     <div className={`signup-container ${theme}`}>
       {/* Theme Toggle Button at Top Right */}
+      <div className="logo">
+        <h1>SeniorsafeAI</h1>
+      </div>
       <div className="theme-toggle" onClick={toggleTheme}>
         {theme === "light" ? (
           <DarkModeIcon style={{ color: "#000000" }} /> // Dark icon for light mode
