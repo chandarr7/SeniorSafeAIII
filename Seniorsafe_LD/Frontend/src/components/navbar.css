@@ -13,6 +13,15 @@
   font-size: 24px;
   font-weight: bold;
   color: white; /* White text */
+  display: flex; /* Use flexbox to align logo and text horizontally */
+  align-items: center; /* Vertically center the logo and text */
+  justify-content: flex-start; /* Ensure content is left-aligned */
+}
+
+.navbar-logo {
+  width: 30px; /* Adjust size as needed */
+  height: 30px; /* Adjust size as needed */
+  margin-right: 8px; /* Space between logo and text */
 }
 
 .navbar-links {
@@ -51,6 +60,10 @@
   color: #000000;
 }
 
+.navbar.light .navbar-logo {
+  filter: brightness(0); /* Invert logo for light mode, if necessary */
+}
+
 .navbar.light .theme-toggle {
   color: #000000;
 }
@@ -63,6 +76,10 @@
 
 .navbar.dark .navbar-brand {
   color: #ffffff;
+}
+
+.navbar.dark .navbar-logo {
+  filter: brightness(1); /* Ensure the logo remains visible in dark mode */
 }
 
 .navbar.dark .theme-toggle {
