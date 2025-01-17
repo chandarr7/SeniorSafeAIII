@@ -50,9 +50,16 @@ export function Password() {
 
   return (
     <div className={`password-container ${theme}`}>
-      {/* Theme Toggle Button at Top Right */}
+
+      {/* Logo and Theme Toggle */}
       <div className="logo">
-        <h1>SeniorsafeAI</h1>
+        <img
+          src="/favicon.png" // Ensure the logo is in the public folder
+          alt="SeniorSafeAI Logo"
+          className="logo-image"
+        />
+        <h1>SeniorSafeAI</h1>
+
       </div>
       <div className="theme-toggle" onClick={toggleTheme}>
         {theme === "light" ? (

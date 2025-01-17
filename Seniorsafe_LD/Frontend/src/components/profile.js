@@ -30,7 +30,9 @@ export function Profile() {
         console.error("Error logging out: ", error);
       });
   };
-
+  const handleAbout = () => {
+    navigate("/about"); // Navigate to the About page
+  };
   return (
     <div className="profile-container">
       <div className="profile-icon" onClick={toggleDropdown}>
@@ -40,6 +42,7 @@ export function Profile() {
         <div className="dropdown-menu">
           <ul>
             <li onClick={handleSettings}>Settings</li>
+            <li onClick={handleAbout}>About</li>
             <li onClick={handleLogout}>Logout</li>
           </ul>
         </div>

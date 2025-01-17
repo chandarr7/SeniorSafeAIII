@@ -14,6 +14,7 @@ import { sessionState, useChatSession } from "@chainlit/react-client";
 //import { Playground } from "./components/playground";
 import { useRecoilValue } from "recoil";
 import { Playground } from "./components/playground";
+import { About } from "./components/about";
 import { ThemeProvider } from "./components/theme"; // Import ThemeProvider
 const userEnv = {};
 
@@ -64,6 +65,7 @@ function App() {
           />
           <Route path="/signup" element={<Signup />} />
           <Route path="/password" element={<Password />} />
+          <Route path="/about" element={<About />} />
           <Route
             path="/playground"
             element={user ? <Playground /> : <Navigate to="/" />}

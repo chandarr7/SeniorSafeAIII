@@ -12,7 +12,14 @@ export function Navbar() {
     <nav className={`navbar ${theme}`}>
       {" "}
       {/* Apply light or dark class based on the theme */}
-      <div className="navbar-brand">SeniorSafeAI</div>
+      <div className="navbar-brand">
+        <img
+          src="/favicon.png"
+          alt="SeniorSafeAI Logo"
+          className="navbar-logo"
+        />
+        <span>SeniorSafeAI</span> {/* Ensure text is inline */}
+      </div>
       <div className="navbar-links">
         <button onClick={toggleTheme} className="theme-toggle">
           {theme === "light" ? <DarkModeIcon /> : <LightModeIcon />}
