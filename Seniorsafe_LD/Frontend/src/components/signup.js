@@ -46,6 +46,7 @@ export function Signup() {
 
   return (
     <div className={`signup-container ${theme}`}>
+
       {/* Logo and Theme Toggle */}
       <div className="logo">
         <img
@@ -54,6 +55,7 @@ export function Signup() {
           className="logo-image"
         />
         <h1>SeniorSafeAI</h1>
+
       </div>
       <div className="theme-toggle" onClick={toggleTheme}>
         {theme === "light" ? (

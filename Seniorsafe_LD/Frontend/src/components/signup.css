@@ -93,6 +93,7 @@ body.dark {
   margin: 0;
   font-size: 1.5em; /* Adjust the font size as per your preference */
 }
+
 /* Logo styling */
 .logo {
   position: absolute;
@@ -115,3 +116,4 @@ body.dark {
   width: 30px; /* Adjust the width of the logo */
   height: 30px; /* Adjust the height of the logo */
 }
+

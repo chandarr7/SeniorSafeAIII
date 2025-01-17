@@ -50,6 +50,7 @@ export function Password() {
 
   return (
     <div className={`password-container ${theme}`}>
+
       {/* Logo and Theme Toggle */}
       <div className="logo">
         <img
@@ -58,6 +59,7 @@ export function Password() {
           className="logo-image"
         />
         <h1>SeniorSafeAI</h1>
+
       </div>
       <div className="theme-toggle" onClick={toggleTheme}>
         {theme === "light" ? (

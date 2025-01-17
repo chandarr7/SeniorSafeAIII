@@ -44,6 +44,7 @@ export function Login() {
 
   return (
     <div className={`login-container ${theme}`}>
+
       {/* Logo and Theme Toggle */}
       <div className="logo">
         <img
@@ -52,6 +53,7 @@ export function Login() {
           className="logo-image"
         />
         <h1>SeniorSafeAI</h1>
+
       </div>
       <div className="theme-toggle" onClick={toggleTheme}>
         {theme === "light" ? (
