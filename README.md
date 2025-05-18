@@ -1,6 +1,5 @@
 # SeniorSafeAI
-Repository for SeniorSafe AI project with Chat UI (sneak peek of the interface here):
-![SeniorSafeAI_UI](https://github.com/user-attachments/assets/e690f2dc-93bc-4233-82df-ac73cf2d1b77)
+Repository for SeniorSafe AI project with Chat UI.
 
 Models and frameworks used
 Mistral as Large Language Model
