@@ -13,7 +13,7 @@ How to Install and Run SeniorSafe AI
 1. Fork this repository: 
 
 ```
-git clone https://github.com/lydinh92/SeniorSafe_LD.git
+git clone https://github.com/<username>/SeniorSafe_LD.git
 cd SeniorSafe_LD
 ```
 
