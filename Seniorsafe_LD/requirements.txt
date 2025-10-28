@@ -5,3 +5,10 @@ PyPDF2
 pypdf
 chromadb
 langchainhub
+
+# Real-Time Scam Detection System
+fastapi
+uvicorn
+aiohttp
+openai
+python-multipart

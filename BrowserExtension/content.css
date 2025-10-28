@@ -1,0 +1,102 @@
+/* SeniorSafeAI Prevention Mode - Content Styles */
+
+/* Warning overlay animations */
+@keyframes seniorsafe-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes seniorsafe-shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-10px);
+  }
+  75% {
+    transform: translateX(10px);
+  }
+}
+
+/* Highlighted suspicious elements */
+.seniorsafe-suspicious {
+  border: 3px solid #ff9800 !important;
+  background-color: #fff3e0 !important;
+  animation: seniorsafe-pulse 2s infinite;
+}
+
+.seniorsafe-dangerous {
+  border: 3px solid #f44336 !important;
+  background-color: #ffebee !important;
+  animation: seniorsafe-shake 0.5s;
+}
+
+/* Link warning indicator */
+.seniorsafe-link-warning::before {
+  content: "⚠️";
+  margin-right: 5px;
+}
+
+/* Email warning badge */
+.seniorsafe-email-badge {
+  display: inline-block;
+  background-color: #ff5252;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: bold;
+  margin-left: 10px;
+  animation: seniorsafe-pulse 1.5s infinite;
+}
+
+/* Blocked content overlay */
+.seniorsafe-blocked-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(244, 67, 54, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  border-radius: 8px;
+}
+
+.seniorsafe-blocked-message {
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  padding: 20px;
+}
+
+/* Tooltip for suspicious elements */
+.seniorsafe-tooltip {
+  position: absolute;
+  background: #333;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 13px;
+  z-index: 100000;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.seniorsafe-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #333 transparent transparent transparent;
+}
