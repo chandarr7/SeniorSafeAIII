@@ -1,0 +1,90 @@
+diff --git a/Seniorsafe_LD/seniorsafe_chat_ui_v3_logic.py b/Seniorsafe_LD/seniorsafe_chat_ui_v3_logic.py
+index ffc7139a..06de27b8 100644
+--- a/Seniorsafe_LD/seniorsafe_chat_ui_v3_logic.py
++++ b/Seniorsafe_LD/seniorsafe_chat_ui_v3_logic.py
+@@ -6,6 +6,7 @@ from langchain.schema.runnable.config import RunnableConfig
+ from langchain.memory import ConversationBufferMemory
+ import chainlit as cl
+ import re
++from local_resources import extract_zip_code, get_resources_by_zip, get_state_from_zip
+ 
+ # --- Additional Detailed Functions ---
+ 
+@@ -128,23 +129,6 @@ Have you invested any money or shared access to your cryptocurrency accounts?"""
+ 
+ # --- Main Chatbot Code ---
+ 
+-# Define Florida jurisdiction resources
+-FLORIDA_RESOURCES = {
+-    "33618": {
+-        "police": "Tampa Police Department: (813) 231-6130",
+-        "sheriff": "Hillsborough County Sheriff's Office: (813) 247-8200",
+-        "victim_advocate": "Tampa Police Department Victim Advocate: (813) 276-3622",
+-        "state_attorney": "Hillsborough County State Attorney's Victim Assistance: (813) 272-6472"
+-    },
+-    "33647": {
+-        "police": "Tampa Police Department: (813) 231-6130",
+-        "sheriff": "Hillsborough County Sheriff's Office: (813) 247-8200",
+-        "victim_advocate": "Tampa Police Department Victim Advocate: (813) 276-3622",
+-        "state_attorney": "Hillsborough County State Attorney's Victim Assistance: (813) 272-6472"
+-    }
+-    # Add more zip codes as needed
+-}
+-
+ @cl.on_chat_start
+ async def on_chat_start():
+     # Send welcome message
+@@ -304,10 +288,14 @@ Have you reported this incident to any authorities yet?""")
+         zip_code = extract_zip_code(message.content)
+         if zip_code:
+             cl.user_session.set("zip_code", zip_code)
+-            response = get_location_resources(zip_code)
++            state = get_state_from_zip(zip_code)
++            if state:
++                response = f"Thank you. I've identified that you're in {state}.\n\n" + get_resources_by_zip(zip_code)
++            else:
++                response = get_resources_by_zip(zip_code)
+             cl.user_session.set("chat_step", "awaiting_followup")
+         else:
+-            response = "Could you please provide your zip code?"
++            response = "Could you please provide your 5-digit ZIP code?"
+             cl.user_session.set("chat_step", "asking_zip")
+     
+     elif chat_step == "awaiting_followup":
+@@ -452,36 +440,6 @@ Would you like me to explain any of these steps in more detail?"""
+     }
+     return actions.get(scam_type, actions["potential online scam"])
+ 
+-def extract_zip_code(message: str) -> str:
+-    """Extracts zip code from message"""
+-    zip_match = re.search(r'\b\d{5}\b', message)
+-    return zip_match.group(0) if zip_match else None
+-
+-def get_location_resources(zip_code: str) -> str:
+-    """Returns location-specific resources"""
+-    if zip_code in FLORIDA_RESOURCES:
+-        resources = FLORIDA_RESOURCES[zip_code]
+-        return f"""Here are your local reporting resources:
+-
+-1. {resources['police']}
+-2. {resources['sheriff']}
+-3. FBI's Internet Crime Complaint Center (IC3): www.ic3.gov
+-4. {resources['victim_advocate']}
+-5. {resources['state_attorney']}
+-
+-Would you like more information about any of these resources?"""
+-    else:
+-        return get_general_resources()
+-
+-def get_general_resources() -> str:
+-    """Returns general reporting resources"""
+-    return """Here are the key places to report this incident:
+-1. FBI's Internet Crime Complaint Center (IC3): www.ic3.gov
+-2. Federal Trade Commission (FTC): www.ftc.gov/complaint
+-3. Your local law enforcement (please check your local department's contact information)
+-4. Your state's consumer protection office
+-
+-Would you like help finding specific contact information for your area?"""
+ 
+ def get_prevention_tips(scam_type: str) -> str:
+     """Returns prevention tips based on scam type"""
