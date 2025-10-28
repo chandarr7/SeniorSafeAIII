@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SeniorSafe AI - Voice Accessibility Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            font-size: 32px;
+        }
+
+        .chat-area {
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 300px;
+            margin: 20px 0;
+            background: #f8f9fa;
+            overflow-y: auto;
+        }
+
+        .message {
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 18px;
+        }
+
+        .bot-message {
+            background: #3498db;
+            color: white;
+            margin-right: 50px;
+        }
+
+        .user-message {
+            background: #2ecc71;
+            color: white;
+            margin-left: 50px;
+            text-align: right;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        button {
+            font-size: 20px;
+            padding: 20px 40px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        button:hover:not(:disabled) {
+            transform: scale(1.05);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .primary-btn {
+            background: #3498db;
+            color: white;
+        }
+
+        .danger-btn {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .success-btn {
+            background: #2ecc71;
+            color: white;
+        }
+
+        .indicator {
+            display: none;
+            text-align: center;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .listening-indicator {
+            background: #e74c3c;
+            color: white;
+            animation: pulse 1s infinite;
+        }
+
+        .speaking-indicator {
+            background: #3498db;
+            color: white;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .input-area {
+            margin: 20px 0;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
+        .info {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .info h3 {
+            margin-top: 0;
+            color: #856404;
+        }
+
+        .info ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎤 SeniorSafe AI Voice Demo</h1>
+
+        <div class="info">
+            <h3>How to Use:</h3>
+            <ul>
+                <li><strong>🎤 Speak:</strong> Click to talk to the chatbot</li>
+                <li><strong>🔊 Voice On/Off:</strong> Toggle voice responses</li>
+                <li><strong>🔇 Stop:</strong> Stop the chatbot from speaking</li>
+            </ul>
+        </div>
+
+        <!-- Indicators -->
+        <div id="listening-indicator" class="indicator listening-indicator">
+            🔴 LISTENING... Please speak now
+        </div>
+
+        <div id="speaking-indicator" class="indicator speaking-indicator">
+            🔊 SPEAKING...
+        </div>
+
+        <!-- Chat Area -->
+        <div id="chat-area" class="chat-area">
+            <div class="message bot-message">
+                👋 Hello! I'm SeniorSafe AI. You can type or speak to me. How can I help you today?
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="input-area">
+            <input type="text" id="user-input" placeholder="Type your message here or click 'Speak' to use voice..." />
+        </div>
+
+        <!-- Control Buttons -->
+        <div class="controls">
+            <button id="voice-input-btn" class="primary-btn" onclick="startVoiceInput()">
+                🎤 Speak
+            </button>
+
+            <button id="send-btn" class="success-btn" onclick="sendMessage()">
+                📤 Send
+            </button>
+
+            <button id="voice-output-btn" class="primary-btn" onclick="toggleVoiceOutput()">
+                🔊 Voice On
+            </button>
+
+            <button id="stop-speaking-btn" class="danger-btn" onclick="stopSpeaking()">
+                🔇 Stop
+            </button>
+        </div>
+    </div>
+
+    <script src="Frontend/src/voice-accessibility.js"></script>
+    <script>
+        // Initialize voice accessibility
+        const voice = new VoiceAccessibility();
+
+        // Auto-speak welcome message
+        setTimeout(() => {
+            voice.speak("Hello! I'm SeniorSafe AI. You can type or speak to me. How can I help you today?");
+        }, 1000);
+
+        /**
+         * Start voice input
+         */
+        function startVoiceInput() {
+            voice.listen((text) => {
+                // Put recognized text in input box
+                document.getElementById('user-input').value = text;
+
+                // Add user message to chat
+                addMessage(text, 'user');
+
+                // Simulate bot response (replace with actual chatbot logic)
+                setTimeout(() => {
+                    const response = getBotResponse(text);
+                    addMessage(response, 'bot');
+
+                    // Speak the response
+                    voice.speak(response);
+                }, 500);
+            });
+        }
+
+        /**
+         * Send text message
+         */
+        function sendMessage() {
+            const input = document.getElementById('user-input');
+            const text = input.value.trim();
+
+            if (!text) {
+                alert('Please type a message or use voice input');
+                return;
+            }
+
+            // Add user message
+            addMessage(text, 'user');
+            input.value = '';
+
+            // Simulate bot response
+            setTimeout(() => {
+                const response = getBotResponse(text);
+                addMessage(response, 'bot');
+
+                // Speak the response
+                voice.speak(response);
+            }, 500);
+        }
+
+        /**
+         * Toggle voice output
+         */
+        function toggleVoiceOutput() {
+            const isEnabled = voice.toggleVoiceOutput();
+            const btn = document.getElementById('voice-output-btn');
+            btn.textContent = isEnabled ? '🔊 Voice On' : '🔇 Voice Off';
+        }
+
+        /**
+         * Stop speaking
+         */
+        function stopSpeaking() {
+            voice.stopSpeaking();
+        }
+
+        /**
+         * Add message to chat
+         */
+        function addMessage(text, type) {
+            const chatArea = document.getElementById('chat-area');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}-message`;
+            messageDiv.textContent = type === 'bot' ? '🤖 ' + text : '👤 ' + text;
+            chatArea.appendChild(messageDiv);
+
+            // Scroll to bottom
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        /**
+         * Simple bot response (replace with actual chatbot)
+         */
+        function getBotResponse(userText) {
+            const lowerText = userText.toLowerCase();
+
+            if (lowerText.includes('hello') || lowerText.includes('hi')) {
+                return "Hello! How can I help you today?";
+            } else if (lowerText.includes('scam')) {
+                return "I'm sorry to hear you may have encountered a scam. Can you tell me more about what happened?";
+            } else if (lowerText.includes('help')) {
+                return "I'm here to help! You can ask me about scams, report an incident, or get local resources.";
+            } else if (lowerText.includes('zip') || /\d{5}/.test(userText)) {
+                return "I can help you find local resources. What's your ZIP code?";
+            } else {
+                return "I understand. Can you tell me more details so I can better assist you?";
+            }
+        }
+
+        // Allow Enter key to send message
+        document.getElementById('user-input').addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
