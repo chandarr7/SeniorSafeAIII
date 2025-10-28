@@ -28,46 +28,66 @@ SeniorSafeAI's Real-Time Scam Detection System provides three powerful layers of
 
 ### 1. Live Link Interceptor
 
-**Real-time URL scanning with multiple threat intelligence sources:**
+**Intercept suspicious links the second they appear:**
 
-- **Google Safe Browsing API** - Checks against Google's database of unsafe websites
-- **VirusTotal API** - Scans URLs against 70+ antivirus engines
-- **OpenAI GPT-4 Analysis** - AI-powered scam pattern detection
-- **Pattern Recognition** - Identifies suspicious URL structures (IP addresses, shortened URLs, brand impersonation)
+- When a senior pastes or opens a link, the interceptor immediately runs parallel checks with **Google Safe Browsing**, **VirusTotal**, and **OpenAI vision models** so the warning appears *before* the click happens.
+- Built-in **pattern recognition** catches brand impersonation, URL shorteners, IP-based domains, and other red flags that commonly bypass traditional filters.
+- The response includes color-coded threat levels, a concise explanation of the danger, and easy next steps ("Do not open", "Share with a trusted contact", etc.) tailored for non-technical users.
 
-**User-Friendly Alerts:**
-- Clear threat level indicators (Low, Medium, High, Critical)
-- Detailed explanations of detected threats
-- Actionable recommendations in simple language
-- Visual warnings designed for seniors
+**Threat intelligence stack:**
+
+- **Google Safe Browsing API** – Checks against Google's database of unsafe websites.
+- **VirusTotal API** – Aggregates scores from 70+ antivirus and threat-intelligence engines.
+- **OpenAI GPT-4/Vision Analysis** – Performs language and visual similarity checks to flag spoofed brands or login forms.
+- **Pattern Recognition Engine** – Identifies suspicious URL structures (IP addresses, homoglyphs, shortened URLs).
+
+**User experience safeguards:**
+
+- Clear threat level indicators (Low, Medium, High, Critical).
+- Detailed explanations of detected risks in plain language.
+- Actionable recommendations seniors can follow without technical knowledge.
+- Visual warnings designed with high contrast and large typography.
 
 ### 2. Voice Scam Detector
 
-**AI-powered phone call analysis:**
+**Turn speakerphone into a real-time scam shield:**
 
-- **Speech-to-Text** - Converts audio to text using OpenAI Whisper
-- **Pattern Detection** - Identifies common scam phrases and tactics
-- **Real-Time Warnings** - Flash alerts during suspicious calls
-- **Scam Type Classification** - Recognizes tech support, IRS, grandparent, lottery scams, etc.
+- While a senior is on a speakerphone call, the detector listens for manipulative scripts, fake tech-support jargon, and pressure tactics. Suspicious phrases trigger instant on-screen alerts so the user can safely hang up.
+- Detection covers tech support, government, banking, grandparent, and lottery scams, and it highlights exactly which phrases caused the alert for quick understanding.
+- Integrates with OpenAI Whisper for fast transcription and uses streaming analysis to keep latency low during live conversations.
 
-**Detection Categories:**
-- Tech Support Scams
-- Government Impersonation (IRS, SSA)
-- Bank Fraud
-- Grandparent Scams
-- Lottery/Prize Scams
-- Pressure Tactics
-- Suspicious Payment Requests
+**AI analysis pipeline:**
+
+- **Speech-to-Text (OpenAI Whisper)** – Converts live audio or recordings into text for downstream analysis.
+- **Pattern & Sentiment Detection** – Flags urgency cues, intimidation tactics, and suspicious payment requests.
+- **Scam Type Classification** – Distinguishes tech support, IRS/government, banking fraud, grandparent, or lottery scams.
+- **Real-Time Alerting** – Streams detections back to the UI so seniors see warnings before the call ends.
+
+**Detection categories:**
+
+- Tech support scams
+- Government impersonation (IRS, SSA, police)
+- Bank and credit card fraud
+- Grandparent and emergency scams
+- Lottery/prize scams
+- High-pressure or urgency tactics
+- Requests for wire transfers, gift cards, or crypto
 
 ### 3. Prevention Mode Browser Extension
 
-**Continuous protection while browsing:**
+**Always-on safety inside the browser:**
 
-- **Email Monitoring** - Scans Gmail, Yahoo, Outlook for suspicious content
-- **Website Analysis** - Detects scam patterns on any webpage
-- **Link Protection** - Blocks dangerous links before clicking
-- **Visual Warnings** - Big "⚠️ This looks suspicious" popups
-- **Reporting System** - Track and report scams
+- Monitors Gmail, Yahoo, Outlook, and any website for scam-like wording or dangerous links, surfacing a large **“⚠️ This looks suspicious”** popup when risks are detected.
+- Intercepts new content as it loads (infinite scroll, dynamically rendered emails, etc.) so nothing slips through after the initial page scan.
+- Provides clear call-to-action buttons for reporting, blocking, or dismissing, and keeps a running log of alerts that caregivers can review later.
+
+**Extension capabilities:**
+
+- **Email monitoring** – Highlights dangerous content inside webmail clients and adds warning badges to suspicious senders.
+- **Website analysis** – Blocks navigation to malicious domains until the user explicitly overrides the warning.
+- **Link protection** – Scans links before allowing clicks, integrating with the backend link scanner for full context.
+- **Visual warnings** – Presents large-format overlays with color-coded severity and next-step guidance.
+- **Caregiver reporting** – Optional export of alert history so family members can review incidents.
 
 ---
 
